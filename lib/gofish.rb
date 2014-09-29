@@ -23,20 +23,12 @@ class StartGame
     puts "There are #{@shuffled_deck.count} cards remaining in the deck"    #instance variable in the string interpolation
   end
 end
-end
 
-
-
-
-
-new_game = StartGame.new                                        #.new a new instantiation of its own class
-new_game.hands
-new_game.show_player_hand
-
-
+RANKS = %w(2 3 4 5 6 7 8 9 10 J Q K A)
 
 class Players
   def initialize(game)
+    @rank = rank
     @hand = {}
     @books = []
     @game = game
@@ -49,7 +41,7 @@ class Players
   attr_reader :name
 
   def ask
-    puts "Do you have a #{rank}?"
+    puts "Do you have any #{@rank}?"
   end
 
 
@@ -69,7 +61,7 @@ class Players
 
     @hand.each do |rank, cards|
       if cards.length == 4
-        puts "#@name made a book of #{rank}"
+        puts "#@name made a book of #{@rank}"
         @books << rank
         @hand.delete(rank)
       end
@@ -78,8 +70,6 @@ class Players
       @game.deal(self, 1)
     end
   end
-
-
 end
 
 
@@ -87,23 +77,30 @@ end
     @books.length
  end
 
- def
-
-
-end
 
   if @shuffled_deck.count = 0
     puts "Out of Cards!"
     books_evaluation
   end
 
-  def books_evaluation
 
-
+  def wanted_card
+      print_hand
+    wanted = nil
+    loop do
+      print "\n Computer, do you have any...what? "
+      wanted = $stdin.gets
+      wanted.strip!.upcase!
+      if not Card::RANKS.include?(wanted)
+        puts "not a valid rank: #{wanted} -- try again."
+      elsif not @hand.has_key?(wanted)
+        puts "you don't have a #{wanted} -- try again"
+      else
+        break
+      end
+    end
+    wanted
   end
-
-  end
-end
 
 class User < Players
   def initialize(game)
@@ -125,5 +122,10 @@ class GoFishGame
     @players =
   end
 
-  puts "Computer asks: Do you have any #{players}"
+  puts "Computer asks: Do you have any #{@rank}"
 end
+
+
+new_game = StartGame.new                                        #.new a new instantiation of its own class
+new_game.hands
+new_game.show_player_hand
